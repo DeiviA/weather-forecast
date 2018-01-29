@@ -13,14 +13,14 @@ class Info extends Component {
 
     componentDidMount () {
         const city = this.props.currentCity;
-        const searchtext = `https://query.yahooapis.com/v1/public/yql?q=select item.condition from weather.forecast where woeid in (select woeid from geo.places(1) where text='${city}') and u='c'&format=json`;
+        const searchtext = `https://query.yahooapis.com/v1/public/yql?q=select * from weather.forecast where woeid in (select woeid from geo.places(1) where text='${city}') and u='c'&format=json`;
         axios.get(searchtext)
         .then(response => {
             const newTemperature = response.data.query.results.channel.item.condition.temp;
             const text = response.data.query.results.channel.item.condition.text;
-            const data = response.data.query.results.channel.item.condition.date;
+            const forecast = response.data.query.results.channel.item.forecast;
             console.log(response);
-            this.props.setWeather(newTemperature, text);
+            this.props.setWeather(newTemperature, text, forecast);
         });
     }
     render () {
@@ -51,7 +51,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         getWeather: () => dispatch({ type: actionsType.GET_WEATHER }),
-        setWeather: (tmp, text) => dispatch({ type: actionsType.SET_WEATHER, tmp: tmp, text: text })
+        setWeather: (tmp, text, forecast) => dispatch({ type: actionsType.SET_WEATHER, tmp: tmp, text: text, forecast: forecast })
     }
 }
 
