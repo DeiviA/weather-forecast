@@ -22,8 +22,9 @@ class Dashboard extends Component {
         axios.get(searchtext)
         .then(response => {
             const newTemperature = response.data.query.results.channel.item.condition.temp;
+            const text = response.data.query.results.channel.item.condition.text;
             console.log(response);
-            this.props.setWeather(newTemperature);
+            this.props.setWeather(newTemperature, text);
             this.props.onChangeCity(this.state.value);
         })
         .catch(error => {
@@ -34,8 +35,8 @@ class Dashboard extends Component {
     render () {
         return (
             <div className="Dashboard">
-                <input className="Search" type="text" placeholder="Search for City" name="city" onKeyUp={(event) => this.onChangeValue(event)}/>
-                <button className="SearchBtn" onClick={this.onSearchCity}>Search</button>
+                <input className="Dashboard__Search" type="text" placeholder="Search for City" name="city" onKeyUp={(event) => this.onChangeValue(event)}/>
+                <button className="Dashboard__SearchBtn" onClick={this.onSearchCity}>Search</button>
             </div>
         )
     }
@@ -51,7 +52,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return {
         onChangeCity: (city) => dispatch({ type: actionsType.CHANGE_CITY, city: city}),
-        setWeather: (tmp) => dispatch({ type: actionsType.SET_WEATHER, tmp: tmp })
+        setWeather: (tmp, text) => dispatch({ type: actionsType.SET_WEATHER, tmp: tmp, text: text })
     }
 }
 

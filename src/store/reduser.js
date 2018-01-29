@@ -3,6 +3,7 @@ import * as actionsType from './actions';
 const initialState = {
     currentCity: 'kyiv',
     currentTemperature: 0,
+    text: 'sun',
     cities: []
 }
 
@@ -15,7 +16,8 @@ const reducer = (state = initialState, action) => {
     if (action.type === actionsType.SET_WEATHER) {
         return {
             ...state,
-            currentTemperature: action.tmp
+            currentTemperature: action.tmp,
+            text: action.text
         }
     }
     // ===============================================================

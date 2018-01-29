@@ -17,13 +17,25 @@ class Info extends Component {
         axios.get(searchtext)
         .then(response => {
             const newTemperature = response.data.query.results.channel.item.condition.temp;
+            const text = response.data.query.results.channel.item.condition.text;
+            const data = response.data.query.results.channel.item.condition.date;
             console.log(response);
-            this.props.setWeather(newTemperature);
+            this.props.setWeather(newTemperature, text);
         });
     }
     render () {
-        return (<div className="Info">
-        <p className="Info__Text">Temperature in <span className="Info__CityName">{this.props.currentCity}</span> is {this.props.temperature}°C</p>
+        return (
+        <div className="Info">
+            <div className="Info__Elem">
+                <div className="Info__Tmp">{this.props.temperature}</div>
+                <div className="Info__Tmp Info__Tmp_celsius">°C</div>
+            </div>
+            <div className="Info__Elem">
+                <div className="Info__InsideElem">
+                    <p className="Info__Text Info__Text_weightBold">{this.props.text}</p>
+                    <p className="Info__Text">Temperature in <span className="Info__CityName">{this.props.currentCity}</span> is {this.props.temperature}°C ({this.props.text})</p>
+                </div>
+            </div>
         </div>)
     }
 }
@@ -31,14 +43,15 @@ class Info extends Component {
 const mapStateToProps = (state) => {
     return {
         currentCity: state.currentCity,
-        temperature: state.currentTemperature
+        temperature: state.currentTemperature,
+        text: state.text
     }
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
         getWeather: () => dispatch({ type: actionsType.GET_WEATHER }),
-        setWeather: (tmp) => dispatch({ type: actionsType.SET_WEATHER, tmp: tmp })
+        setWeather: (tmp, text) => dispatch({ type: actionsType.SET_WEATHER, tmp: tmp, text: text })
     }
 }
 

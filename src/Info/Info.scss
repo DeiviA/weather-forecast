@@ -1,10 +1,36 @@
 .Info {
     width: 100%;
-    height: 100px;
-    background-color: blueviolet;
+    box-sizing: border-box;
+    padding: 0 100px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: stretch;
+    color: white;
+    &__Elem {
+        margin-left: 25px;
+        display: inherit;
+    }
+
+    &__InsideElem {
+        display: flex;
+        justify-content: flex-end;
+        flex-direction: column;
+        padding-bottom: 25px;
+    }
+
+    &__Tmp {
+        font-size: 12rem;
+        font-weight: 100;
+        &_celsius {
+            font-size: 4rem;
+        }
+    }
+
     &__Text {
-        text-align: center;
         padding: 10px;
+        &_weightBold {
+            font-size: 2rem;
+        }
     }
     &__CityName {
         text-transform: capitalize;
