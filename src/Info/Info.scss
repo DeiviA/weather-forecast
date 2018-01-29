@@ -2,4 +2,11 @@
     width: 100%;
     height: 100px;
     background-color: blueviolet;
+    &__Text {
+        text-align: center;
+        padding: 10px;
+    }
+    &__CityName {
+        text-transform: capitalize;
+    }
 }
