@@ -1,13 +1,17 @@
 import React, { Component } from 'react';
+import Dashboard from './Dashboard/Dashboard';
+import Info from './Info/Info';
+import Forecast from './Forecast/Forecast';
+
 import './App.css';
 
 class App extends Component {
   render() {
     return (
-      <div className="App">
-        <header className="App-header">
-          <p className="App-header__logo">Welcome</p>
-        </header>
+      <div className="Wrapper">
+        <Dashboard />
+        <Info />
+        <Forecast />
       </div>
     );
   }
