@@ -9,7 +9,9 @@ const initialState = {
     forecast: [
         { code: '22', date: '29 Jan', day: 'Mon', high: '10', low: '2', text: 'cloudy'}
     ],
-    cities: []
+    cities: [
+        { city: 'kyiv', country: 'Ukraine'}
+    ]
 }
 
 const reducer = (state = initialState, action) => {
@@ -34,6 +36,18 @@ const reducer = (state = initialState, action) => {
             ...state,
             currentCity: action.city,
             currentCountry: action.country
+        }
+    }
+    // ===============================================================
+    if (action.type === actionsType.ADD_FAVORITE) {
+        const newLoc = {
+            ...action.newLocation
+        }
+        const newCities = state.cities.slice();
+        newCities.push(newLoc);
+        return {
+            ...state,
+            cities: newCities
         }
     }
 
