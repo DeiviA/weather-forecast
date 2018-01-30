@@ -2,8 +2,10 @@ import * as actionsType from './actions';
 
 const initialState = {
     currentCity: 'kyiv',
+    currentCountry: 'Ukraine',
     currentTemperature: 0,
     text: 'sun',
+    code: 12,
     forecast: [
         { code: '22', date: '29 Jan', day: 'Mon', high: '10', low: '2', text: 'cloudy'}
     ],
@@ -22,14 +24,16 @@ const reducer = (state = initialState, action) => {
             ...state,
             currentTemperature: action.tmp,
             text: action.text,
-            forecast: newForcast
+            forecast: newForcast,
+            code: action.code
         }
     }
     // ===============================================================
     if (action.type === actionsType.CHANGE_CITY) {
         return {
             ...state,
-            currentCity: action.city
+            currentCity: action.city,
+            currentCountry: action.country
         }
     }
 

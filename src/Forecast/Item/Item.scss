@@ -3,5 +3,8 @@
     height: 100px;
     &__Text{
         margin: 0 0 10px 0;
+        &_bigger {
+            font-size: 2rem;
+        }
     }
 }
