@@ -12,6 +12,11 @@ class Dashboard extends Component {
         showBar: false
     }
 
+    // onSubmitCity = (event) => {
+    //     event.preventDefault();
+    //     this.onSearchCity();
+    // }
+
     onChangeValue = (event) => {
         this.setState({
             value: event.target.value
@@ -38,8 +43,12 @@ class Dashboard extends Component {
             console.log(response);
             this.props.setWeather(weather.newTemperature, weather.text, weather.forecast, weather.code);
             this.props.onChangeCity(location.city, location.country);
-            this.onClickDashboard(); // call this func to hide the bar
-        })
+            this.saveToLocalStorage('currentCity', location.city);
+            this.saveToLocalStorage('currentCountry', location.country);
+            this.setState({  
+                showBar: false  //  hide the bar
+                });
+            })
         .catch(error => {
             console.log(error);
         });
@@ -91,31 +100,80 @@ class Dashboard extends Component {
     }
 
     findMyLocation = () => {
-        navigator.geolocation.getCurrentPosition(
-            (position) => {
-                let city = '';
-                const lat = position.coords.latitude;
-                const lng = position.coords.longitude;
-                const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=AIzaSyCx9uiyR6wDuSY4glfKO4FAuQHwH8vTF4A&language=en`;
-                axios.get(url)
-                    .then(responce => {
-                        city = responce.data.results[2].address_components[0].short_name;
-                        city = `${city}`;
-                        console.log(responce);
-                        console.log('GOOD!!! Geolocation city is ' + city);
-                        console.log(responce.data.results[2].address_components);
-                        this.onSearchCity(city);
-                        this.onClickDashboard();
-                    })
-                    .catch(error => {
-                        console.log('WHY ERROR!');
-                        console.log(error);
-                    });
-                
-                // console.log('Последний раз вас засекали здесь: ' +
-                //     position.coords.latitude + ", " + position.coords.longitude);
+        let shouldNavigate = true;
+        if (typeof(Storage) !== "undefined") {
+            const savedCity = sessionStorage.getItem('city');
+            console.log('savedCity =');
+            console.log(savedCity);
+            if (savedCity) {
+                console.log('local storage');
+                shouldNavigate = false;
+                this.onSearchCity(savedCity);
             }
-        );
+        }
+        if (shouldNavigate) {
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    let city = '';
+                    const lat = position.coords.latitude;
+                    const lng = position.coords.longitude;
+                    const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=AIzaSyCx9uiyR6wDuSY4glfKO4FAuQHwH8vTF4A&language=en&result_type=political`;
+                    axios.get(url)
+                        .then(responce => {
+                            city = responce.data.results[2].address_components[1].short_name;
+                            city = `${city}`;
+                            if (typeof(Storage) !== "undefined") {
+                                sessionStorage.setItem("city", city);
+                            }
+                            console.log(responce);
+                            console.log('GOOD!!! Geolocation city is ' + city);
+                            console.log(responce.data.results[2].address_components);
+                            this.onSearchCity(city);
+                        })
+                        .catch(error => {
+                            console.log('WHY ERROR!');
+                            console.log(error);
+                        });
+                    
+                    // console.log('Последний раз вас засекали здесь: ' +
+                    //     position.coords.latitude + ", " + position.coords.longitude);
+                }
+            );
+        }
+    }
+
+    saveToLocalStorage = (key, data) => {
+        if (typeof(Storage) !== "undefined") {
+            localStorage.setItem(key, data);
+        }
+    }
+
+    componentDidMount () {
+        if (typeof(Storage) !== "undefined" && localStorage.getItem('currentCity')) {
+            const location = {
+                city: localStorage.getItem('currentCity'),
+                country: localStorage.getItem('currentCountry')
+            }
+            this.props.onChangeCity(location.city, location.country);
+            const cities = [];
+            let counter = 0;
+            for (let i = 0; i < 4; i++) {
+                let data = localStorage.getItem(`${i}`);
+                let favLoc = '';
+                if (data) {
+                    this.saveToLocalStorage(counter, data);
+                    counter++;
+                    cities.push(data);
+                    favLoc = data.split(',');
+                    let newLocation = {
+                        city: favLoc[0],
+                        country: favLoc[1]
+                    }
+                    this.props.addFavorite(newLocation);
+                }
+            }
+            console.log(cities);
+        }
     }
 
     render () {
@@ -131,8 +189,8 @@ class Dashboard extends Component {
         if (this.state.showBar) {
             dashboardBox = (
                 <div className="DashboardBox">
-                    <div className="DashboardBox__Elem">
-                        <input className="DashboardBox__Search" type="text" placeholder="Search for City" name="city" onKeyUp={(event) => this.onChangeValue(event)}/>
+                     <div className="DashboardBox__Elem" > {/* onSubmit={this.onSubmitCity} */}
+                        <input className="DashboardBox__Search" type="text" autoComplete="off" placeholder="Search for City" name="city" onChange={(event) => this.onChangeValue(event)}/>
                         <button className="DashboardBox__SearchBtn" onClick={this.onSearchCity}>Search</button>
                     </div>
                     <div className="DashboardBox__Elem DashboardBox__Elem_list">
@@ -149,13 +207,14 @@ class Dashboard extends Component {
                     </div>
                     <div className="DashboardBoxWrapper__Favorite" onClick={this.onClickPlus}>
                         <p className="DashboardBoxWrapper__Plus">{star}</p>
+                        <span className="tooltiptext">Add to my favorites</span>
                     </div>
                     <div className="DashboardBoxWrapper__Favorite" onClick={this.findMyLocation}>
                         <p className="DashboardBoxWrapper__Plus"><i className="fa fa-crosshairs"></i></p>
+                        <span className="tooltiptext">Detect my location</span>
                     </div>
                     {dashboardBox}
                 </div>
-                
             </div>
         )
     }

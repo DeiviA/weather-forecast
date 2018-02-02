@@ -42,7 +42,9 @@ const reducer = (state = initialState, action) => {
             ...action.newLocation
         }
         const newCities = state.cities.slice();
-        let pushNewLoc = true; // will we oush new location or not
+        newLoc.id = newCities.length;
+        let pushNewLoc = true; // will we push new location or not
+        localStorage.setItem(`${newLoc.id}`, `${newLoc.city},${newLoc.country}`);
         newCities.forEach(item => {
             // We are looking if there is already this city in our array
             if (item.city.toLowerCase() === newLoc.city.toLowerCase()) {
@@ -62,10 +64,16 @@ const reducer = (state = initialState, action) => {
         const removedCity = action.removedCity;
         const newCities = state.cities.slice();
         let index = 0;
+        const hasLocalStorage = typeof(Storage) !== "undefined";
         newCities.forEach((item, i) => {
             // We are looking for this city in our array
+            if (hasLocalStorage) localStorage.setItem(`${i}`, `${item.city},${item.country}`);
             if (item.city.toLowerCase() === removedCity.toLowerCase()) {
                 index = i;
+                if (hasLocalStorage) {
+                    console.log('remove #' + i);
+                    localStorage.removeItem(`${i}`);
+                }
             }
         });
         newCities.splice(index, 1);

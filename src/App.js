@@ -14,7 +14,7 @@ class App extends Component {
     if (code <= 4)  imgUrl = `url(${images.cloudy})`;  // tornado
     if (code >= 10 && code <= 16)  imgUrl = `url(${images.cloudy})`;  // snow & rain
     if (code >= 24 && code <= 30)  imgUrl = `url(${images.cloudy})`;  // cloudy
-    if (code >= 31 && code <= 32)  imgUrl = `url(${images.sunny})`;  // sunny
+    if (code >= 31 && code <= 33)  imgUrl = `url(${images.sunny})`;  // sunny
     if (code === 36)  imgUrl = `url(${images.sun})`;  // hot
     if (code >= 37 && code <= 40)  imgUrl = `url(${images.sunny})`;  // thunderstorm
     if (code >= 41 && code <= 43)  imgUrl = `url(${images.sunny})`;  // heavy snow

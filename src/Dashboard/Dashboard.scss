@@ -14,7 +14,6 @@ $my-gray: #c4c4c44d;
 .DashboardBoxWrapper {
     width: 350px;
     height: 40px;
-    outline: 1px solid gray;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -40,6 +39,7 @@ $my-gray: #c4c4c44d;
         height: 30px;
         box-sizing: border-box;
         border-radius: 15px;
+        position: relative;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -48,6 +48,10 @@ $my-gray: #c4c4c44d;
         cursor: pointer;
         &:hover {
             background-color: #e2e2e24d;   
+        }
+        &:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
         }
     }
     &__Plus {
@@ -90,4 +94,21 @@ $my-gray: #c4c4c44d;
         width: 75px;
         background-color: #3d419d;
     }
+}
+
+.tooltiptext {
+    visibility: hidden;
+    width: 150px;
+    background-color: #555;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+    position: absolute;
+    z-index: 1;
+    bottom: -110%;
+    left: 50%;
+    margin-left: -60px;
+    opacity: 0;
+    transition: opacity 0.3s;
 }
