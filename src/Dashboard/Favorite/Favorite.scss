@@ -1,7 +1,42 @@
+@mixin flex($justify, $direction) {
+	display: flex;
+	justify-content: $justify;
+	align-items: center;
+	flex-direction: $direction;
+	flex-wrap: nowrap;
+}
+
 .Favorite {
     width: 100%;
+    padding: 5px;
+    cursor: pointer;
     height: 25px;
     font-size: 14px;
     text-transform: capitalize;
     margin-top: 5px;
+    @include flex(space-between, row);
+    &__Text {
+        width: 260px;
+    }
+    &__Remove {
+        width: 20px;
+        height: 20px;
+        display: none;
+        border-radius: 10px;
+        text-align: center;
+        font-size: 16px;
+        background-color: #e2e2e2;
+        transition: background-color 0.3s;
+    }
+    &:hover {
+        background-color: #3d419d;
+        color: white;
+    }
+
+    &:hover &__Remove {
+        display: block;
+        &:hover {
+            background-color: #ff5a3d;
+        }
+    }
 }

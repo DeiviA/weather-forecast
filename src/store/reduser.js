@@ -9,9 +9,7 @@ const initialState = {
     forecast: [
         { code: '22', date: '29 Jan', day: 'Mon', high: '10', low: '2', text: 'cloudy'}
     ],
-    cities: [
-        { city: 'kyiv', country: 'Ukraine'}
-    ]
+    cities: []
 }
 
 const reducer = (state = initialState, action) => {
@@ -44,7 +42,33 @@ const reducer = (state = initialState, action) => {
             ...action.newLocation
         }
         const newCities = state.cities.slice();
-        newCities.push(newLoc);
+        let pushNewLoc = true; // will we oush new location or not
+        newCities.forEach(item => {
+            // We are looking if there is already this city in our array
+            if (item.city.toLowerCase() === newLoc.city.toLowerCase()) {
+                pushNewLoc = false;
+            }
+        });
+        
+        if (pushNewLoc) newCities.push(newLoc);
+
+        return {
+            ...state,
+            cities: newCities
+        }
+    }
+    // ===============================================================
+    if (action.type === actionsType.REMOVE_FAVORITE) {
+        const removedCity = action.removedCity;
+        const newCities = state.cities.slice();
+        let index = 0;
+        newCities.forEach((item, i) => {
+            // We are looking for this city in our array
+            if (item.city.toLowerCase() === removedCity.toLowerCase()) {
+                index = i;
+            }
+        });
+        newCities.splice(index, 1);
         return {
             ...state,
             cities: newCities

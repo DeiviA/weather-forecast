@@ -18,8 +18,10 @@ class Dashboard extends Component {
         });
     }
 
-    onSearchCity = () => {
-        const city = this.state.value;
+    onSearchCity = (favorite) => {
+        console.log('search city is ' + favorite);
+        let city = this.state.value;
+        if (favorite.length) city = favorite;
         const searchtext = `https://query.yahooapis.com/v1/public/yql?q=select * from weather.forecast where woeid in (select woeid from geo.places(1) where text='${city}') and u='c'&format=json`;
         axios.get(searchtext)
         .then(response => {
@@ -31,18 +33,19 @@ class Dashboard extends Component {
             };
             const location = {
                 city: response.data.query.results.channel.location.city,
-                contry: response.data.query.results.channel.location.country
+                country: response.data.query.results.channel.location.country
             }
             console.log(response);
             this.props.setWeather(weather.newTemperature, weather.text, weather.forecast, weather.code);
             this.props.onChangeCity(location.city, location.country);
-            this.onClickDashboard();
+            this.onClickDashboard(); // call this func to hide the bar
         })
         .catch(error => {
             console.log(error);
         });
     }
 
+    // hide or show favorite list ?
     onClickDashboard = () => {
         const newValue = !this.state.showBar;
         this.setState({
@@ -50,6 +53,7 @@ class Dashboard extends Component {
         });
     }
 
+    // Add new location to our favorite list
     onClickPlus = () => {
         const newLocation = {
             city: this.props.city,
@@ -58,11 +62,71 @@ class Dashboard extends Component {
         this.props.addFavorite(newLocation);
     }
 
-    render () {
-        let dashboardBox = '';
-        const citiesList = this.props.cities.map((item, index) => {
-            return <Favorite key={index} city={item.city} country={item.country}/>
+    // Choose some location from our favorite list
+    // and transfer city name to method onSearchCity()
+    onClickFavorite = (city) => {
+        const favoriteCity = `${city}`;
+        this.setState({
+            value: city
         });
+        this.onSearchCity(favoriteCity);
+    }
+
+    // this function add a star if current city is in our list
+    isCityFavorite = () => {
+        const currentCity = this.props.city;
+        const cities = this.props.cities.slice();
+        let res = (<i className="fa fa-star-o"></i>);
+        // check if the array of cities is empty to preven the error
+        if (cities.length) {
+            cities.forEach(item => {
+                if (item.city.toLowerCase() === currentCity.toLowerCase()) {
+                // is city in list ?
+                // if so we change our star
+                res = (<i className="fa fa-star"></i>);
+                }
+            });
+        }
+        return res;
+    }
+
+    findMyLocation = () => {
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                let city = '';
+                const lat = position.coords.latitude;
+                const lng = position.coords.longitude;
+                const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=AIzaSyCx9uiyR6wDuSY4glfKO4FAuQHwH8vTF4A&language=en`;
+                axios.get(url)
+                    .then(responce => {
+                        city = responce.data.results[2].address_components[0].short_name;
+                        city = `${city}`;
+                        console.log(responce);
+                        console.log('GOOD!!! Geolocation city is ' + city);
+                        console.log(responce.data.results[2].address_components);
+                        this.onSearchCity(city);
+                        this.onClickDashboard();
+                    })
+                    .catch(error => {
+                        console.log('WHY ERROR!');
+                        console.log(error);
+                    });
+                
+                // console.log('Последний раз вас засекали здесь: ' +
+                //     position.coords.latitude + ", " + position.coords.longitude);
+            }
+        );
+    }
+
+    render () {
+        let dashboardBox = ''; 
+        let citiesList = ''; //empty favorite list
+        let star = this.isCityFavorite(); // star 
+        if (this.props.cities.length) {
+            citiesList = this.props.cities.map((item, index) => {
+            return <Favorite key={index} city={item.city} country={item.country} findFavorite={this.onClickFavorite} removeFavorite={this.props.removeFavorite}/>
+        });
+        }
 
         if (this.state.showBar) {
             dashboardBox = (
@@ -84,10 +148,14 @@ class Dashboard extends Component {
                         <p className="DashboardBoxWrapper__LocationInfo">{this.props.city}, {this.props.country}</p>
                     </div>
                     <div className="DashboardBoxWrapper__Favorite" onClick={this.onClickPlus}>
-                        <p className="DashboardBoxWrapper__Plus">+</p>
+                        <p className="DashboardBoxWrapper__Plus">{star}</p>
                     </div>
+                    <div className="DashboardBoxWrapper__Favorite" onClick={this.findMyLocation}>
+                        <p className="DashboardBoxWrapper__Plus"><i className="fa fa-crosshairs"></i></p>
+                    </div>
+                    {dashboardBox}
                 </div>
-                {dashboardBox}
+                
             </div>
         )
     }
@@ -106,7 +174,8 @@ const mapDispatchToProps = dispatch => {
     return {
         onChangeCity: (city, country) => dispatch({ type: actionsType.CHANGE_CITY, city: city, country: country }),
         setWeather: (tmp, text, forecast, code) => dispatch({ type: actionsType.SET_WEATHER, tmp: tmp, text: text, forecast: forecast, code: code }),
-        addFavorite: (loc) => dispatch({ type: actionsType.ADD_FAVORITE, newLocation: loc})
+        addFavorite: (loc) => dispatch({ type: actionsType.ADD_FAVORITE, newLocation: loc}),
+        removeFavorite: (city) => dispatch({ type: actionsType.REMOVE_FAVORITE, removedCity: city })
     }
 }
 

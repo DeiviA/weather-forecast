@@ -12,7 +12,7 @@ $my-gray: #c4c4c44d;
 }
 
 .DashboardBoxWrapper {
-    width: 300px;
+    width: 350px;
     height: 40px;
     outline: 1px solid gray;
     display: flex;
@@ -59,7 +59,7 @@ $my-gray: #c4c4c44d;
 }
 
 .DashboardBox {
-    width: 300px;
+    width: 350px;
     position: absolute;
     box-sizing: border-box;
     padding: 5px;
@@ -82,7 +82,7 @@ $my-gray: #c4c4c44d;
         height: 25px;
         padding: 5px;
         color: white;
-        width: 200px;
+        width: 250px;
     }
     &__SearchBtn {
         outline: 1px solid gray;
