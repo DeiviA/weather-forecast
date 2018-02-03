@@ -12,7 +12,10 @@ class Info extends Component {
     }
 
     componentDidMount () {
-        const city = this.props.currentCity;
+        let city = this.props.currentCity;
+        if (typeof(Storage) !== "undefined" && localStorage.getItem('currentCity')) {
+            city = localStorage.getItem('currentCity');
+        }   
         const searchtext = `https://query.yahooapis.com/v1/public/yql?q=select * from weather.forecast where woeid in (select woeid from geo.places(1) where text='${city}') and u='c'&format=json`;
         axios.get(searchtext)
         .then(response => {

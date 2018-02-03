@@ -9,7 +9,8 @@ import * as actionsType from './../store/actions';
 class Dashboard extends Component {
     state = {
         value: '',
-        showBar: false
+        showBar: false,
+        spinner: false
     }
 
     // onSubmitCity = (event) => {
@@ -112,6 +113,9 @@ class Dashboard extends Component {
             }
         }
         if (shouldNavigate) {
+            this.setState({
+                spinner: true
+            });
             navigator.geolocation.getCurrentPosition(
                 (position) => {
                     let city = '';
@@ -129,10 +133,16 @@ class Dashboard extends Component {
                             console.log('GOOD!!! Geolocation city is ' + city);
                             console.log(responce.data.results[2].address_components);
                             this.onSearchCity(city);
+                            this.setState({
+                                spinner: false
+                            });
                         })
                         .catch(error => {
                             console.log('WHY ERROR!');
                             console.log(error);
+                            this.setState({
+                                spinner: false
+                            });
                         });
                     
                     // console.log('Последний раз вас засекали здесь: ' +
@@ -179,12 +189,15 @@ class Dashboard extends Component {
     render () {
         let dashboardBox = ''; 
         let citiesList = ''; //empty favorite list
+        let geoIco = (<i className="fa fa-crosshairs"></i>);
         let star = this.isCityFavorite(); // star 
         if (this.props.cities.length) {
             citiesList = this.props.cities.map((item, index) => {
             return <Favorite key={index} city={item.city} country={item.country} findFavorite={this.onClickFavorite} removeFavorite={this.props.removeFavorite}/>
         });
         }
+
+        if (this.state.spinner) geoIco = (<i className="fa fa-spinner fa-spin"></i>);
 
         if (this.state.showBar) {
             dashboardBox = (
@@ -199,6 +212,7 @@ class Dashboard extends Component {
                 </div>
             );
         }
+
         return (
             <div className="Dashboard">
                 <div className="DashboardBoxWrapper">
@@ -210,7 +224,7 @@ class Dashboard extends Component {
                         <span className="tooltiptext">Add to my favorites</span>
                     </div>
                     <div className="DashboardBoxWrapper__Favorite" onClick={this.findMyLocation}>
-                        <p className="DashboardBoxWrapper__Plus"><i className="fa fa-crosshairs"></i></p>
+                        <p className="DashboardBoxWrapper__Plus">{geoIco}</p>
                         <span className="tooltiptext">Detect my location</span>
                     </div>
                     {dashboardBox}

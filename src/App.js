@@ -8,16 +8,20 @@ import './App.css';
 import images from './Images/Images';
 
 class App extends Component {
+
   whichBackground = (codeStr) => {
     const code = +codeStr;
     let imgUrl = `url(${images.cloudy})`;
-    if (code <= 4)  imgUrl = `url(${images.cloudy})`;  // tornado
-    if (code >= 10 && code <= 16)  imgUrl = `url(${images.cloudy})`;  // snow & rain
-    if (code >= 24 && code <= 30)  imgUrl = `url(${images.cloudy})`;  // cloudy
-    if (code >= 31 && code <= 33)  imgUrl = `url(${images.sunny})`;  // sunny
+    if (code <= 4)  imgUrl = `url(${images.lightning})`;  // tornado
+    if (code === 5 || code === 6 || code === 10 || code === 11)  imgUrl = `url(${images.rain})`;  // snow & rain
+    if (code >= 13 && code <= 16)  imgUrl = `url(${images.snow})`;  // snow flurries
+    if (code >= 19 && code <= 22)  imgUrl = `url(${images.fog})`;  // fog
+    if (code >= 24 && code <= 28)  imgUrl = `url(${images.clouds})`;  // cloudy
+    if (code >= 29 && code <= 30)  imgUrl = `url(${images.sunlight})`;  // cloudy
+    if (code >= 31 && code <= 33)  imgUrl = `url(${images.sun})`;  // sunny
     if (code === 36)  imgUrl = `url(${images.sun})`;  // hot
-    if (code >= 37 && code <= 40)  imgUrl = `url(${images.sunny})`;  // thunderstorm
-    if (code >= 41 && code <= 43)  imgUrl = `url(${images.sunny})`;  // heavy snow
+    if (code >= 37 && code <= 40)  imgUrl = `url(${images.lightning})`;  // thunderstorm
+    if (code >= 41 && code <= 46)  imgUrl = `url(${images.snow})`;  // heavy snow
     return imgUrl;
   }
 
