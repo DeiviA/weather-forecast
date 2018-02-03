@@ -34,7 +34,7 @@ class Info extends Component {
         <div className="Info">
             <div className="Info__Elem">
                 <div className="Info__Tmp">{this.props.temperature}</div>
-                <div className="Info__Tmp Info__Tmp_celsius">°C</div>
+                <div className="Info__Cel">°C</div>
             </div>
             <div className="Info__Elem">
                 <div className="Info__InsideElem">

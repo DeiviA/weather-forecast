@@ -76,6 +76,7 @@ $my-gray: #c4c4c44d;
     &__Elem {
         display: flex;
         justify-content: space-between;
+        position: relative;
         &_list {
             flex-direction: column;
         }

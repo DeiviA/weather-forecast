@@ -21,9 +21,10 @@
     &__Tmp {
         font-size: 12rem;
         font-weight: 100;
-        &_celsius {
-            font-size: 4rem;
-        }
+    }
+    &__Cel {
+        font-weight: 100;
+        font-size: 4rem;
     }
 
     &__Text {
@@ -34,5 +35,56 @@
     }
     &__CityName {
         text-transform: capitalize;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .Info {
+        &__Tmp {
+            font-size: 4rem;
+        }
+
+        &__Cel {
+            font-size: 2rem;
+        }
+
+        &__Text {
+            font-size: 0.7rem;
+            &_weightBold {
+                font-size: 1rem;
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 699px) {
+    .Info__Tmp_celcius {
+        font-size: 3re;
+    }
+}
+
+@media screen and (max-width: 700px) {
+    .Info {
+        &__Tmp {
+            font-size: 8rem;
+        }
+
+        &__Cel {
+            font-size: 3rem;
+        }
+
+        &__Text {
+            font-size: 0.7rem;
+            &_weightBold {
+                font-size: 1rem;
+            }
+        }
+    }
+    
+}
+
+@media screen and (max-width: 900px) {
+    .Info {
+        padding: 0;
     }
 }

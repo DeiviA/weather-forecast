@@ -18,7 +18,7 @@ class App extends Component {
     if (code >= 19 && code <= 22)  imgUrl = `url(${images.fog})`;  // fog
     if (code >= 24 && code <= 28)  imgUrl = `url(${images.clouds})`;  // cloudy
     if (code >= 29 && code <= 30)  imgUrl = `url(${images.sunlight})`;  // cloudy
-    if (code >= 31 && code <= 33)  imgUrl = `url(${images.sun})`;  // sunny
+    if (code >= 31 && code <= 33)  imgUrl = `url(${images.sunlight1})`;  // sunny
     if (code === 36)  imgUrl = `url(${images.sun})`;  // hot
     if (code >= 37 && code <= 40)  imgUrl = `url(${images.lightning})`;  // thunderstorm
     if (code >= 41 && code <= 46)  imgUrl = `url(${images.snow})`;  // heavy snow

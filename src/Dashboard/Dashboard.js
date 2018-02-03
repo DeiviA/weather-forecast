@@ -51,6 +51,13 @@ class Dashboard extends Component {
                 });
             })
         .catch(error => {
+            const tooltip = document.getElementById('searchTooltip');
+            tooltip.style.visibility = 'visible';
+            tooltip.style.opacity = '1';
+            setTimeout(() => {
+                tooltip.style.visibility = 'hidden';
+                tooltip.style.opacity = '0';
+            }, 3000);
             console.log(error);
         });
     }
@@ -204,6 +211,7 @@ class Dashboard extends Component {
                 <div className="DashboardBox">
                      <div className="DashboardBox__Elem" > {/* onSubmit={this.onSubmitCity} */}
                         <input className="DashboardBox__Search" type="text" autoComplete="off" placeholder="Search for City" name="city" onChange={(event) => this.onChangeValue(event)}/>
+                        <span className="tooltiptext" id="searchTooltip">No search resalts!</span>
                         <button className="DashboardBox__SearchBtn" onClick={this.onSearchCity}>Search</button>
                     </div>
                     <div className="DashboardBox__Elem DashboardBox__Elem_list">
