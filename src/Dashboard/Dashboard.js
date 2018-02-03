@@ -12,53 +12,53 @@ class Dashboard extends Component {
         showBar: false,
         spinner: false
     }
-
-    // onSubmitCity = (event) => {
-    //     event.preventDefault();
-    //     this.onSearchCity();
-    // }
-
+    // this method is for watching what visitor is typing in input
     onChangeValue = (event) => {
         this.setState({
             value: event.target.value
         });
     }
-
+    // get request to the yahoo server
     onSearchCity = (favorite) => {
-        console.log('search city is ' + favorite);
-        let city = this.state.value;
+        // if we click search
+        let city = this.state.value; // if we don't pass any argument we get text from input
+        // if we just pass an argument to the method
         if (favorite.length) city = favorite;
         const searchtext = `https://query.yahooapis.com/v1/public/yql?q=select * from weather.forecast where woeid in (select woeid from geo.places(1) where text='${city}') and u='c'&format=json`;
         axios.get(searchtext)
         .then(response => {
+            // if get request is successful we create object 'weather' and write there all necessary information
             const weather = {
                 newTemperature: response.data.query.results.channel.item.condition.temp,
                 text: response.data.query.results.channel.item.condition.text,
                 forecast: response.data.query.results.channel.item.forecast,
                 code: response.data.query.results.channel.item.condition.code
             };
+            // and object 'lcoation' 
             const location = {
                 city: response.data.query.results.channel.location.city,
                 country: response.data.query.results.channel.location.country
             }
-            console.log(response);
+            // then pass all data to redux via 'setWeather' method
             this.props.setWeather(weather.newTemperature, weather.text, weather.forecast, weather.code);
+            // and via 'onChangeCity' method
             this.props.onChangeCity(location.city, location.country);
-            this.saveToLocalStorage('currentCity', location.city);
-            this.saveToLocalStorage('currentCountry', location.country);
+            this.saveToLocalStorage('currentCity', location.city); // and write current location to local storage
+            this.saveToLocalStorage('currentCountry', location.country); // so when we come back to the app we retrieve our last data
             this.setState({  
                 showBar: false  //  hide the bar
                 });
             })
         .catch(error => {
-            const tooltip = document.getElementById('searchTooltip');
+            // in case we mistyped or server doesn't respond we show tooltip
+            const tooltip = document.getElementById('searchTooltip'); 
             tooltip.style.visibility = 'visible';
             tooltip.style.opacity = '1';
             setTimeout(() => {
                 tooltip.style.visibility = 'hidden';
                 tooltip.style.opacity = '0';
             }, 3000);
-            console.log(error);
+            console.log(error); // what went wrong
         });
     }
 
@@ -76,6 +76,7 @@ class Dashboard extends Component {
             city: this.props.city,
             country: this.props.country
         }
+        // transfer data via redux
         this.props.addFavorite(newLocation);
     }
 
@@ -89,7 +90,7 @@ class Dashboard extends Component {
         this.onSearchCity(favoriteCity);
     }
 
-    // this function add a star if current city is in our list
+    // this function add a star (className), if current city is in our list
     isCityFavorite = () => {
         const currentCity = this.props.city;
         const cities = this.props.cities.slice();
@@ -108,24 +109,25 @@ class Dashboard extends Component {
     }
 
     findMyLocation = () => {
+        // first, we allow to find our coordinates
         let shouldNavigate = true;
         if (typeof(Storage) !== "undefined") {
+            // but if we find we already did it in this session, we retrieve informstion from sessionStorage
             const savedCity = sessionStorage.getItem('city');
-            console.log('savedCity =');
-            console.log(savedCity);
             if (savedCity) {
-                console.log('local storage');
-                shouldNavigate = false;
+                shouldNavigate = false; // we don't allow to searh our coordinates
+                // them pass retrived city from sessionStorage to method
                 this.onSearchCity(savedCity);
             }
         }
+        // in case our sessionStorage is empty, we allow to searh our coordinates
         if (shouldNavigate) {
             this.setState({
-                spinner: true
+                spinner: true // we'll show spinner when browser is looking for coordinates
             });
             navigator.geolocation.getCurrentPosition(
                 (position) => {
-                    let city = '';
+                    let city = ''; // here we'll write current city from server respond
                     const lat = position.coords.latitude;
                     const lng = position.coords.longitude;
                     const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=AIzaSyCx9uiyR6wDuSY4glfKO4FAuQHwH8vTF4A&language=en&result_type=political`;
@@ -134,26 +136,19 @@ class Dashboard extends Component {
                             city = responce.data.results[2].address_components[1].short_name;
                             city = `${city}`;
                             if (typeof(Storage) !== "undefined") {
-                                sessionStorage.setItem("city", city);
-                            }
-                            console.log(responce);
-                            console.log('GOOD!!! Geolocation city is ' + city);
-                            console.log(responce.data.results[2].address_components);
+                                sessionStorage.setItem("city", city); // writing our geolocation to sessionStorage
+                            }                                         // to prevent another one long searching
                             this.onSearchCity(city);
                             this.setState({
-                                spinner: false
+                                spinner: false // hide our spinner
                             });
                         })
                         .catch(error => {
-                            console.log('WHY ERROR!');
                             console.log(error);
                             this.setState({
-                                spinner: false
+                                spinner: false // hide our spinner
                             });
                         });
-                    
-                    // console.log('Последний раз вас засекали здесь: ' +
-                    //     position.coords.latitude + ", " + position.coords.longitude);
                 }
             );
         }
@@ -166,6 +161,7 @@ class Dashboard extends Component {
     }
 
     componentDidMount () {
+        // in case we have some data in local storage
         if (typeof(Storage) !== "undefined" && localStorage.getItem('currentCity')) {
             const location = {
                 city: localStorage.getItem('currentCity'),
@@ -174,6 +170,7 @@ class Dashboard extends Component {
             this.props.onChangeCity(location.city, location.country);
             const cities = [];
             let counter = 0;
+            // and get data about our favorite list
             for (let i = 0; i < 4; i++) {
                 let data = localStorage.getItem(`${i}`);
                 let favLoc = '';
@@ -189,7 +186,6 @@ class Dashboard extends Component {
                     this.props.addFavorite(newLocation);
                 }
             }
-            console.log(cities);
         }
     }
 
@@ -209,7 +205,7 @@ class Dashboard extends Component {
         if (this.state.showBar) {
             dashboardBox = (
                 <div className="DashboardBox">
-                     <div className="DashboardBox__Elem" > {/* onSubmit={this.onSubmitCity} */}
+                     <div className="DashboardBox__Elem" >
                         <input className="DashboardBox__Search" type="text" autoComplete="off" placeholder="Search for City" name="city" onChange={(event) => this.onChangeValue(event)}/>
                         <span className="tooltiptext" id="searchTooltip">No search resalts!</span>
                         <button className="DashboardBox__SearchBtn" onClick={this.onSearchCity}>Search</button>

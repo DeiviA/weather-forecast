@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Ico from'../../Ico/Ico';
+import Ico from'../../Ico/Ico'; // this is our font for weather-ico
 import './Item.css'
 
 const item = (props) => {

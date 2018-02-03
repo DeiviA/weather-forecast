@@ -6,27 +6,28 @@ import * as actionsType from './../store/actions';
 import './Info.css';
 
 class Info extends Component {
-    state = {
-        city: 'kyiv',
-        temperature: 0
-    }
 
     componentDidMount () {
-        let city = this.props.currentCity;
+        // write to variable initial state from reduser.js in case we first time running our app
+        let city = this.props.currentCity; 
         if (typeof(Storage) !== "undefined" && localStorage.getItem('currentCity')) {
-            city = localStorage.getItem('currentCity');
+            city = localStorage.getItem('currentCity'); // but if not, we retrieve data from local storage
         }   
         const searchtext = `https://query.yahooapis.com/v1/public/yql?q=select * from weather.forecast where woeid in (select woeid from geo.places(1) where text='${city}') and u='c'&format=json`;
         axios.get(searchtext)
         .then(response => {
+            // if get request is successful we create object 'weather' and write there all necessary information
             const weather = {
                 newTemperature: response.data.query.results.channel.item.condition.temp,
                 text: response.data.query.results.channel.item.condition.text,
                 forecast: response.data.query.results.channel.item.forecast,
                 code: response.data.query.results.channel.item.condition.code
             };
-            console.log(response);
+            // then pass all data to redux via 'setWeather' method
             this.props.setWeather(weather.newTemperature, weather.text, weather.forecast, weather.code);
+        })
+        .catch(error => {
+            console.log(error);
         });
     }
     render () {
@@ -56,7 +57,6 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        getWeather: () => dispatch({ type: actionsType.GET_WEATHER }),
         setWeather: (tmp, text, forecast, code) => dispatch({ type: actionsType.SET_WEATHER, tmp: tmp, text: text, forecast: forecast, code: code })
     }
 }

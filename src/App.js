@@ -26,10 +26,12 @@ class App extends Component {
   }
 
   render() {
+    // depending on which code we retrieve we switch between backgrounds
     const imgUrl = this.whichBackground(this.props.code);
     const style = {
       backgroundImage: imgUrl
     }
+    
     return (
       <div className="Wrapper" style={style}>
         <Dashboard />
