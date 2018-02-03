@@ -108,8 +108,9 @@ $my-gray: #c4c4c44d;
     position: absolute;
     z-index: 1;
     bottom: -110%;
-    left: 50%;
-    margin-left: -60px;
+    // left: 50%;
+    // margin-left: -60px;
+    right: -20px;
     opacity: 0;
     transition: opacity 0.3s;
 }
