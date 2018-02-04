@@ -6,6 +6,10 @@ const initialState = {
     currentTemperature: 0,
     text: 'sun',
     code: 12,
+    humidity: 90,
+    pressure: 1000.00,
+    visibility: 10,
+    wind: 10.00,
     forecast: [
         { code: '22', date: '29 Jan', day: 'Mon', high: '10', low: '2', text: 'cloudy'}
     ],
@@ -23,7 +27,11 @@ const reducer = (state = initialState, action) => {
             currentTemperature: action.tmp,
             text: action.text,
             forecast: newForcast,
-            code: action.code
+            code: action.code,
+            humidity: action.humidity,
+            pressure: action.pressure,
+            visibility: action.visibility,
+            wind: action.wind
         }
     }
     // ===============================================================

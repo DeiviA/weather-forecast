@@ -21,10 +21,14 @@ class Info extends Component {
                 newTemperature: response.data.query.results.channel.item.condition.temp,
                 text: response.data.query.results.channel.item.condition.text,
                 forecast: response.data.query.results.channel.item.forecast,
-                code: response.data.query.results.channel.item.condition.code
+                code: response.data.query.results.channel.item.condition.code,
+                humidity: response.data.query.results.channel.atmosphere.humidity,
+                pressure: response.data.query.results.channel.atmosphere.pressure,
+                visibility: response.data.query.results.channel.atmosphere.visibility,
+                wind: response.data.query.results.channel.wind.speed
             };
             // then pass all data to redux via 'setWeather' method
-            this.props.setWeather(weather.newTemperature, weather.text, weather.forecast, weather.code);
+            this.props.setWeather(weather.newTemperature, weather.text, weather.forecast, weather.code, weather.humidity, weather.pressure, weather.visibility, weather.wind);
         })
         .catch(error => {
             console.log(error);
@@ -40,7 +44,13 @@ class Info extends Component {
             <div className="Info__Elem">
                 <div className="Info__InsideElem">
                     <p className="Info__Text Info__Text_weightBold">{this.props.text}</p>
-                    <p className="Info__Text">Temperature in <span className="Info__CityName">{this.props.currentCity}</span> is {this.props.temperature}°C ({this.props.text})</p>
+                    <p className="Info__Text">Barometer {this.props.pressure} mb</p>
+                    <p className="Info__Text">Visibility {this.props.visibility} km</p>
+                    {/* <p className="Info__Text">Temperature in <span className="Info__CityName">{this.props.currentCity}</span> is {this.props.temperature}°C ({this.props.text})</p> */}
+                </div>
+                <div className="Info__InsideElem">
+                    <p className="Info__Text">Humidity {this.props.humidity}%</p>
+                    <p className="Info__Text">Wind {this.props.wind} km/h</p>
                 </div>
             </div>
         </div>)
@@ -51,13 +61,27 @@ const mapStateToProps = (state) => {
     return {
         currentCity: state.currentCity,
         temperature: state.currentTemperature,
-        text: state.text
+        text: state.text,
+        humidity: state.humidity,
+        pressure: state.pressure,
+        visibility: state.visibility,
+        wind: state.wind
     }
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        setWeather: (tmp, text, forecast, code) => dispatch({ type: actionsType.SET_WEATHER, tmp: tmp, text: text, forecast: forecast, code: code })
+        setWeather: (tmp, text, forecast, code, humidity, pressure, visibility, wind) => dispatch({ 
+            type: actionsType.SET_WEATHER, 
+            tmp: tmp, 
+            text: text, 
+            forecast: forecast, 
+            code: code,
+            humidity: humidity,
+            pressure: pressure,
+            visibility: visibility,
+            wind: wind
+        })
     }
 }
 

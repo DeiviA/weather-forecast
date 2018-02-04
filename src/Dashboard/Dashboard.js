@@ -32,15 +32,20 @@ class Dashboard extends Component {
                 newTemperature: response.data.query.results.channel.item.condition.temp,
                 text: response.data.query.results.channel.item.condition.text,
                 forecast: response.data.query.results.channel.item.forecast,
-                code: response.data.query.results.channel.item.condition.code
+                code: response.data.query.results.channel.item.condition.code,
+                humidity: response.data.query.results.channel.atmosphere.humidity,
+                pressure: response.data.query.results.channel.atmosphere.pressure,
+                visibility: response.data.query.results.channel.atmosphere.visibility,
+                wind: response.data.query.results.channel.wind.speed
             };
             // and object 'lcoation' 
             const location = {
-                city: response.data.query.results.channel.location.city,
+                city: response.data.query.results.channel.location.city.replace(/'/g, ''),
                 country: response.data.query.results.channel.location.country
             }
+            console.log(response);
             // then pass all data to redux via 'setWeather' method
-            this.props.setWeather(weather.newTemperature, weather.text, weather.forecast, weather.code);
+            this.props.setWeather(weather.newTemperature, weather.text, weather.forecast, weather.code, weather.humidity, weather.pressure, weather.visibility, weather.wind);
             // and via 'onChangeCity' method
             this.props.onChangeCity(location.city, location.country);
             this.saveToLocalStorage('currentCity', location.city); // and write current location to local storage
@@ -250,7 +255,17 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return {
         onChangeCity: (city, country) => dispatch({ type: actionsType.CHANGE_CITY, city: city, country: country }),
-        setWeather: (tmp, text, forecast, code) => dispatch({ type: actionsType.SET_WEATHER, tmp: tmp, text: text, forecast: forecast, code: code }),
+        setWeather: (tmp, text, forecast, code, humidity, pressure, visibility, wind) => dispatch({ 
+            type: actionsType.SET_WEATHER, 
+            tmp: tmp, 
+            text: text, 
+            forecast: forecast, 
+            code: code,
+            humidity: humidity,
+            pressure: pressure,
+            visibility: visibility,
+            wind: wind
+        }),
         addFavorite: (loc) => dispatch({ type: actionsType.ADD_FAVORITE, newLocation: loc}),
         removeFavorite: (city) => dispatch({ type: actionsType.REMOVE_FAVORITE, removedCity: city })
     }

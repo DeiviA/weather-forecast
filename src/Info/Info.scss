@@ -15,7 +15,7 @@
         display: flex;
         justify-content: flex-end;
         flex-direction: column;
-        padding-bottom: 25px;
+        padding-bottom: 20px;
     }
 
     &__Tmp {
@@ -29,6 +29,7 @@
 
     &__Text {
         padding: 10px;
+        font-size: 14px;
         &_weightBold {
             font-size: 2rem;
         }

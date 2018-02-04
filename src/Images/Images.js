@@ -1,15 +1,15 @@
-import sun from './sun.jpg';
-import sunny from './sunny.jpg';
-import cloudy from './cloudy.jpg';
-import appearance from './appearance.JPG';
-import clouds from './clouds.jpg';
-import lightning from './lightning.jpg';
-import sunlight from './sunlight.jpg';
-import sunlight1 from './sunlight1.jpg';
-import waring from './waring.jpg';
-import snow from './snow.jpg';
-import rain from './rain.jpg';
-import fog from './fog.jpeg';
+import sun from './sun-min.jpg';
+import sunny from './sunny-min.jpg';
+import cloudy from './cloudy-min.jpg';
+import appearance from './appearance-min.JPG';
+import clouds from './clouds-min.jpg';
+import lightning from './lightning-min.jpg';
+import sunlight from './sunlight-min.jpg';
+import sunlight1 from './sunlight1-min.jpg';
+import waring from './waring-min.jpg';
+import snow from './snow-min.jpg';
+import rain from './rain-min.jpg';
+import fog from './fog-min.jpeg';
 
 const images = { 
     sun: sun, 
