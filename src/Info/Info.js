@@ -43,14 +43,14 @@ class Info extends Component {
             </div>
             <div className="Info__Elem">
                 <div className="Info__InsideElem">
-                    <p className="Info__Text Info__Text_weightBold">{this.props.text}</p>
-                    <p className="Info__Text">Barometer {this.props.pressure} mb</p>
-                    <p className="Info__Text">Visibility {this.props.visibility} km</p>
+                    <p className="Info__Text Info__Text_bigger">{this.props.text}</p>
+                    <p className="Info__Text">Barometer <span className="Info__Text_bold">{this.props.pressure} mb</span></p>
+                    <p className="Info__Text">Visibility <span className="Info__Text_bold">{this.props.visibility} km</span></p>
                     {/* <p className="Info__Text">Temperature in <span className="Info__CityName">{this.props.currentCity}</span> is {this.props.temperature}°C ({this.props.text})</p> */}
                 </div>
                 <div className="Info__InsideElem">
-                    <p className="Info__Text">Humidity {this.props.humidity}%</p>
-                    <p className="Info__Text">Wind {this.props.wind} km/h</p>
+                    <p className="Info__Text">Humidity <span className="Info__Text_bold">{this.props.humidity}%</span></p>
+                    <p className="Info__Text">Wind <span className="Info__Text_bold">{this.props.wind} km/h</span></p>
                 </div>
             </div>
         </div>)

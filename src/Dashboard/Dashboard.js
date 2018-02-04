@@ -176,7 +176,7 @@ class Dashboard extends Component {
             const cities = [];
             let counter = 0;
             // and get data about our favorite list
-            for (let i = 0; i < 4; i++) {
+            for (let i = 0; i < 6; i++) {
                 let data = localStorage.getItem(`${i}`);
                 let favLoc = '';
                 if (data) {

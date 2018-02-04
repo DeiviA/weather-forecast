@@ -4,6 +4,7 @@
     padding: 0 100px;
     display: flex;
     justify-content: flex-start;
+    flex-direction: row;
     align-items: stretch;
     color: white;
     &__Elem {
@@ -30,8 +31,11 @@
     &__Text {
         padding: 10px;
         font-size: 14px;
-        &_weightBold {
+        &_bigger {
             font-size: 2rem;
+        }
+        &_bold {
+            font-weight: bold;
         }
     }
     &__CityName {
@@ -39,8 +43,9 @@
     }
 }
 
-@media screen and (max-width: 480px) {
+@media screen and (max-width: 500px) {
     .Info {
+        flex-direction: column;
         &__Tmp {
             font-size: 4rem;
         }
@@ -51,7 +56,7 @@
 
         &__Text {
             font-size: 0.7rem;
-            &_weightBold {
+            &_bigger {
                 font-size: 1rem;
             }
         }
@@ -76,7 +81,7 @@
 
         &__Text {
             font-size: 0.7rem;
-            &_weightBold {
+            &_bigger {
                 font-size: 1rem;
             }
         }
